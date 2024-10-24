@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginRequest, SignUpRequest, UsuarioFiltroParams } from "./Interfaces";
+import { LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "./Interfaces";
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:8080/",
@@ -35,4 +35,14 @@ export const Users = {
     get: (id: string) => axiosInstance.get(`restrito/pessoa/${id}`),
     update: (id: string, data: SignUpRequest) => axiosInstance.put(`restrito/pessoa/${id}`, data),
     delete: (id: string) => axiosInstance.delete(`restrito/pessoa/${id}`),
+    me: () => axiosInstance.get("restrito/pessoa/me")
 };
+
+export const Mensagems = {
+    list: (params: MensagemList) => axiosInstance.get("restrito/mensagem/todas", { params: params }),
+    filter: (params: MensagemFilter) => axiosInstance.get("restrito/mensagem/filtros", { params: params }),
+    get: (id: string) => axiosInstance.get(`restrito/mensagem/${id}`),
+    delete: (id: string, params: {usuarioId: number}) => axiosInstance.delete(`restrito/mensagem/${id}`,{ params: params }),
+    curtir: (id: string, params: {usuarioId: number}) => axiosInstance.post(`restrito/mensagem/${id}/curtir?usuarioId=${params.usuarioId}`),
+    postar: (data: MensagemRequest) => axiosInstance.post("restrito/mensagem", data),
+}

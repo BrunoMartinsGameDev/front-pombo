@@ -5,6 +5,53 @@
   text-align: center;
 }
 
+.Card{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 3rem;
+}
+.Card div{
+  display: grid;
+  grid-template-columns: 100px auto;
+}
+.Card label{
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  margin-top: .7rem;
+  max-width: 30px;
+}
+.Card .inputText{
+  padding: 0.5rem;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  min-width: 200px;
+  margin-left: 1rem;
+  justify-self: end;
+  margin-bottom: 1rem;
+}
+.p-password-input{
+  min-width: 200px;
+  margin-left: -.5rem;
+}
+.Tweet div{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.Tweet label{
+  margin: 1rem 0;
+}
+.Tweet{
+  /* margin-top: -20rem; */
+  margin-bottom: 2rem;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

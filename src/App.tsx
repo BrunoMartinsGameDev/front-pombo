@@ -5,6 +5,8 @@ import 'primereact/resources/themes/saga-blue/theme.css'; // Importando estilos 
 import 'primeicons/primeicons.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
+import HomePage from './components/HomePage';
 function App() {
 
   return (
@@ -12,6 +14,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/create-account" element={<RegisterPage />} />
+          <Route path="/home" element={<HomePage />} />
         </Routes>
       </BrowserRouter>
     </>

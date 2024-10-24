@@ -3,27 +3,32 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button'; // Botão do PrimeReact
 import { InputText } from 'primereact/inputtext'; // InputText do PrimeReact
 import 'bootstrap/dist/css/bootstrap.min.css'; // Certifique-se de que o CSS do Bootstrap foi importado
-import { Auth } from './Api';
+import { Auth, Users } from './Api';
+import { toastError } from './CustomToast';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: any) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     const senha = password;
-    Auth.login({ email, senha }).then((res) => {
+    await Auth.login({ email, senha }).then((res) => {
         const token = res.data.token;
         localStorage.setItem('token', token);
+        Users.me().then((res) => {
+            localStorage.setItem('user', JSON.stringify(res.data));
+            navigate('/home');
+        }).catch((error) => {
+            console.log(error);
+        })
     })
     .catch((error) => {
+      toastError('Email ou senha inválidos!');
         console.log(error);
     });
-    console.log('E-mail:', email);
-    console.log('Senha:', password);
     // Redireciona após login bem-sucedido
-    navigate('/home');
   };
 
   return (
