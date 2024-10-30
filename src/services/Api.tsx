@@ -1,6 +1,7 @@
 import axios from "axios";
-import { LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "./Interfaces";
+import { DenunciaList, LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "../components/Interfaces";
 
+//#region Axios Config
 const axiosInstance = axios.create({
     baseURL: "http://localhost:8080/",
     headers: {
@@ -19,16 +20,23 @@ axiosInstance.interceptors.request.use((config) => {
 }, (error) => {
     return Promise.reject(error);
 });
+//#endregion
 
-export const Logout = () => {
+const Logout = () => {
     localStorage.removeItem("token");
 }
+const UserData = JSON.parse(localStorage.getItem('user')?.toString() || '{}');
 
+//#region Auth Endpoints
 export const Auth = {
     login: (data: LoginRequest) => axiosInstance.post("auth/login", data),
     signup: (data: SignUpRequest) => axiosInstance.post("auth/novo", data),
+    logout: () => Logout(),
+    user: () => UserData,
 };
+//#endregion
 
+//#region User Endpoints
 export const Users = {
     list: () => axiosInstance.get("restrito/pessoa/todos"),
     filter: (params: UsuarioFiltroParams) => axiosInstance.get("restrito/pessoa/filtro", { params: params }),
@@ -37,7 +45,9 @@ export const Users = {
     delete: (id: string) => axiosInstance.delete(`restrito/pessoa/${id}`),
     me: () => axiosInstance.get("restrito/pessoa/me")
 };
+//#endregion
 
+//#region Message Endpoints
 export const Mensagems = {
     list: (params: MensagemList) => axiosInstance.get("restrito/mensagem/todas", { params: params }),
     filter: (params: MensagemFilter) => axiosInstance.get("restrito/mensagem/filtros", { params: params }),
@@ -46,3 +56,14 @@ export const Mensagems = {
     curtir: (id: string, params: {usuarioId: number}) => axiosInstance.post(`restrito/mensagem/${id}/curtir?usuarioId=${params.usuarioId}`),
     postar: (data: MensagemRequest) => axiosInstance.post("restrito/mensagem", data),
 }
+//#endregion
+
+//#region Denuncias Endpoints
+export const Denuncias = {
+    get: (id: string) => axiosInstance.get(`restrito/denuncia/${id}`),
+    bloquear: (id: string, data: {bloqueado: boolean}) => axiosInstance.put(`restrito/denuncia/${id}`, data),
+    delete: (id: string) => axiosInstance.delete(`restrito/denuncia/${id}`),
+    list: (params: DenunciaList) => axiosInstance.get("restrito/denuncia", { params: params }),
+    postar: (data: MensagemRequest) => axiosInstance.post("restrito/denuncia", data),
+}
+//#endregion

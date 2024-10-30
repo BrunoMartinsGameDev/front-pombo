@@ -1,8 +1,8 @@
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
-import { Mensagems } from './Api'; // Certifique-se de que o caminho está correto
-import { toastError } from './CustomToast';
+import { Mensagems } from '../services/Api'; // Certifique-se de que o caminho está correto
+import { toastError } from '../services/CustomToast';
 function PostTweet() {
     const [tweet, setTweet] = useState('');
     const [errorMessage, setErrorMessage] = useState('');

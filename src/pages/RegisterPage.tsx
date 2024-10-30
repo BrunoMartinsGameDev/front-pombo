@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
-import { SignUpRequest } from './Interfaces';
-import { Auth } from './Api';
-import { toastError } from './CustomToast';
+import { SignUpRequest } from '../components/Interfaces';
+import { Auth } from '../services/Api';
+import { toastError } from '../services/CustomToast';
 
 const RegisterPage = () => {
     const [email, setEmail] = useState('');

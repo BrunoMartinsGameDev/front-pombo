@@ -4,9 +4,11 @@ import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/saga-blue/theme.css'; // Importando estilos principais do PrimeReact
 import 'primeicons/primeicons.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
-import HomePage from './components/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HomePage from './pages/HomePage';
+import DenunciaPage from './pages/DenunciaPage';
+import ProtectedRoutes from './services/ProtectedRoute';
 function App() {
 
   return (
@@ -15,7 +17,10 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/create-account" element={<RegisterPage />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/bloqueados" element={<DenunciaPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

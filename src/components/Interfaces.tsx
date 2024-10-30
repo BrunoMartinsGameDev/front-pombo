@@ -32,6 +32,12 @@ export interface MensagemList{
     page:number | null
     size: number | null
 }
+export interface DenunciaList{
+    page:number | null
+    size: number | null
+    usuarioId: number | null
+    mensagemId: number | null
+}
 export interface MensagemFilter{
     usuarioId: number
     conteudo: string
@@ -40,6 +46,10 @@ export interface MensagemFilter{
 }
 export interface MensagemRequest{
     texto: string
+}
+export interface DenunciaRequest{
+    descricao: string
+    mensagem_id: string
 }
 export interface MensagemResponse{
     id: string

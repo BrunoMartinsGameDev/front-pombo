@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button'; // Botão do PrimeReact
 import { InputText } from 'primereact/inputtext'; // InputText do PrimeReact
 import 'bootstrap/dist/css/bootstrap.min.css'; // Certifique-se de que o CSS do Bootstrap foi importado
-import { Auth, Users } from './Api';
-import { toastError } from './CustomToast';
+import { Auth, Users } from '../services/Api';
+import { toastError } from '../services/CustomToast';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    Auth.logout();
+  },[]);
   const handleLogin = async (e: any) => {
     e.preventDefault();
     const senha = password;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Tweet from './Tweet'; // O componente Tweet que criamos antes
-import { Mensagems } from './Api';
-import { toastError } from './CustomToast';
+import { Auth, Mensagems } from '../services/Api';
+import { toastError } from '../services/CustomToast';
 import { MensagemResponse } from './Interfaces';
 
 const TweetList = () => {
@@ -26,9 +26,8 @@ const TweetList = () => {
 
   // Função para deletar um tweet
   const handleDeleteTweet = (id: any) => {
-    setTweets(tweets.filter(tweet => tweet.id !== id)); // Removendo o tweet da lista após deleção
-    const user = localStorage.getItem('user');
-    const userId = user ? JSON.parse(user).id : null;
+    setTweets(tweets.filter(tweet => tweet.id !== id));
+    const userId = Auth.user().id
     console.log(userId);
     Mensagems.delete(id, {usuarioId: userId}).catch((error) => {
         console.log(error);
@@ -41,8 +40,7 @@ const TweetList = () => {
     setTweets(tweets.map(tweet =>
       tweet.id === id ? { ...tweet, likes: tweet.quantidadeLikes + 1 } : tweet
     ));
-    const user = localStorage.getItem('user');
-    const userId = user ? JSON.parse(user).id : null;
+    const userId = Auth.user().id
     return await Mensagems.curtir(id, {usuarioId: userId})
     .then((response) => {
         return response.data
