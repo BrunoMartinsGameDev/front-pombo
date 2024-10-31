@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Auth, Mensagems } from "../services/Api";
 import { useEffect, useState } from "react";
 import { MensagemResponse } from "../components/Interfaces";
-import { toastError, toastInfo } from "../services/CustomToast";
+import { toastError, toastInfo, toastWarning } from "../services/CustomToast";
 import { InputText } from "primereact/inputtext";
 import { useAuth } from "../services/AuthProvider";
 
@@ -15,15 +15,21 @@ function HomePage() {
     const navigate = useNavigate();
     const [tweets, setTweets] = useState<MensagemResponse[]>([]);
     const [loading, setLoading] = useState(true); // Estado para indicar se os dados estão sendo carregados
-    const [error, setError] = useState(null); // Estado para armazenar erros
+    const [error, setError] = useState<string | null>(null); // Estado para armazenar erros
 
     // Função para buscar tweets da API
-    const fetchTweets = async () => {
-        await Mensagems.list({ page: null, size: null }).then((response) => {
+    const fetchTweets = async (search?: string) => {
+        setLoading(true);
+        //Nao ta atualizando quando posta msg e esta trazendo todos os tweets, nao sei pq
+        await Mensagems.filter({ usuarioId: search, conteudo: search, page: null, size: null }).then((response) => {
+            console.log(response.data.content);
             setTweets(response.data.content);
-            setLoading(false);
+            setError(null);
         }).catch((error) => {
-            setError(error);
+            const errorMessage = error.response?.data?.Message || 'Erro ao buscar tweets';
+            setError(errorMessage);
+        }).finally(() => {
+            setLoading(false);
         })
     };
 
@@ -40,8 +46,10 @@ function HomePage() {
                 toastInfo('Tweet deletado')
             })
             .catch((error) => {
-                console.log(error);
-                toastError('Erro ao deletar')
+                if (error.status === 401) {
+                    toastWarning('Você não pode deletar esse tweet, pois não foi criado por você')
+                }
+                else{toastError('Erro ao deletar')}
             })
     };
 
@@ -63,11 +71,11 @@ function HomePage() {
     return (
         <>
             {user.role === 'ADMIN' && (<Button label="Denuncias" icon="pi pi-twitter" onClick={() => navigate('/bloqueados')} />)}
-            <PostTweet onNewTweet={fetchTweets} />
+            <PostTweet onNewTweet={() => {fetchTweets}} />
             <div className="tweet-list">
                 <div style={{ width: '50%', marginBottom: '1rem' }} className="p-inputgroup flex-1">
-                    <InputText placeholder="Keyword" />
-                    <Button icon="pi pi-search" className="p-button-warning" />
+                    <InputText placeholder="Keyword" onChange={(e) => fetchTweets(e.target.value)} />
+                    <Button icon="pi pi-search" className="p-button-primary" />
                 </div>
                 <TweetList
                     tweets={tweets}

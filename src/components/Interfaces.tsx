@@ -39,10 +39,10 @@ export interface DenunciaList{
     mensagemId: number | null
 }
 export interface MensagemFilter{
-    usuarioId: number
-    conteudo: string
-    page: number
-    size: number
+    usuarioId: string | null | undefined
+    conteudo: string | null | undefined
+    page: number | null
+    size: number | null
 }
 export interface MensagemRequest{
     texto: string
