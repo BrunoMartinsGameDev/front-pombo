@@ -3,7 +3,9 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
 import { Mensagems } from '../services/Api'; // Certifique-se de que o caminho está correto
 import { toastError } from '../services/CustomToast';
-function PostTweet() {
+import { encrypt } from '../services/Crypto';
+import { MensagemResponse } from './Interfaces';
+function PostTweet({onNewTweet}: {onNewTweet: (newTweet: MensagemResponse) => void}) {
     const [tweet, setTweet] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -15,11 +17,12 @@ function PostTweet() {
             return;
         }
         // Chama o endpoint para postar a mensagem
-        await Mensagems.postar({ texto: tweet })
+        await Mensagems.postar({ texto: encrypt(tweet) })
         .then((res) => {
             console.log(res.data);
             setSuccessMessage('Mensagem postada com sucesso!');
             setTweet(''); // Limpa o campo após postar
+            onNewTweet(res.data);
         })
         .catch((error) => {
             console.log(error);

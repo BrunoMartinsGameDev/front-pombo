@@ -1,56 +1,17 @@
-import { useEffect, useState } from 'react';
-import Tweet from './Tweet'; // O componente Tweet que criamos antes
-import { Auth, Mensagems } from '../services/Api';
-import { toastError } from '../services/CustomToast';
+import Tweet from './Tweet';
+import { decrypt } from '../services/Crypto';
 import { MensagemResponse } from './Interfaces';
 
-const TweetList = () => {
-  const [tweets, setTweets] = useState<MensagemResponse[]>([]); // Estado para armazenar a lista de tweets
-  const [loading, setLoading] = useState(true); // Estado para indicar se os dados estão sendo carregados
-  const [error, setError] = useState(null); // Estado para armazenar erros
+interface TweetListProps {
+  tweets: MensagemResponse[];
+  loading: boolean;
+  error: string | null;
+  handleDeleteTweet: (id: string) => void;
+  handleLikeTweet: (id: string) => Promise<any>;
+}
 
-  // Função para buscar tweets da API
-  const fetchTweets = async () => {
-    await Mensagems.list({page: null, size: null}).then((response) => {
-      setTweets(response.data.content);
-      setLoading(false);
-    }).catch((error) => {
-      setError(error);
-    })
-  };
-
-  // Hook useEffect para carregar os tweets quando o componente montar
-  useEffect(() => {
-    fetchTweets();
-  }, []);
-
-  // Função para deletar um tweet
-  const handleDeleteTweet = (id: any) => {
-    setTweets(tweets.filter(tweet => tweet.id !== id));
-    const userId = Auth.user().id
-    console.log(userId);
-    Mensagems.delete(id, {usuarioId: userId}).catch((error) => {
-        console.log(error);
-        toastError('Erro ao deletar')
-    })
-  };
-
-  // Função para curtir um tweet
-  const handleLikeTweet = async (id:any): Promise<any> => {
-    setTweets(tweets.map(tweet =>
-      tweet.id === id ? { ...tweet, likes: tweet.quantidadeLikes + 1 } : tweet
-    ));
-    const userId = Auth.user().id
-    return await Mensagems.curtir(id, {usuarioId: userId})
-    .then((response) => {
-        return response.data
-    })
-    .catch((error) => {
-        console.log(error);
-        toastError('Erro ao curtir')
-        return {Message: 'Erro ao curtir'}
-    })
-  };
+const TweetList = ({ tweets, loading, error, handleDeleteTweet, handleLikeTweet }: TweetListProps) => {
+  
   if (loading) return <p>Carregando...</p>;
   if (error) return <p>{error}</p>;
 
@@ -62,7 +23,7 @@ const TweetList = () => {
           <Tweet
             key={tweet.id}
             id={tweet.id}
-            texto={tweet.texto}
+            texto={decrypt(tweet.texto)}
             username={tweet.usuarioCriador.email}
             createdAt={tweet.dataCriacao.toString()}
             initialLikes={tweet.quantidadeLikes}

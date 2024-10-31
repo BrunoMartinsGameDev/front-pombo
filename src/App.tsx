@@ -9,20 +9,23 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import DenunciaPage from './pages/DenunciaPage';
 import ProtectedRoutes from './services/ProtectedRoute';
+import { AuthProvider } from './services/AuthProvider';
 function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/create-account" element={<RegisterPage />} />
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/bloqueados" element={<DenunciaPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/create-account" element={<RegisterPage />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/bloqueados" element={<DenunciaPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </>
   )
 }

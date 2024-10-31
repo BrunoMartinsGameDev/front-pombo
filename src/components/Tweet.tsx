@@ -32,14 +32,14 @@ const Tweet = (props: TweetProps) => {
     <div className="tweet-container" style={styles.tweetContainer}>
       <div className="tweet-header">
         <h3>{props.username}</h3> {/* Exibe o nome de quem postou */}
-        <span style={styles.date}>{new Date(props.createdAt).toLocaleString()}</span> {/* Data de criação */}
+        <span style={styles.date}>{new Date(props.createdAt).toLocaleString()}</span>
       </div>
       <div className="tweet-body">
         <p>{props.texto}</p> {/* Exemplo de conteúdo do tweet */}
       </div>
       <div className="tweet-footer" style={styles.footer}>
-        <button onClick={handleLike} style={styles.likeButton}>Like ({likes})</button> {/* Botão de Like */}
-        <button onClick={handleDelete} style={styles.deleteButton}>Delete</button> {/* Botão de Delete */}
+        <button onClick={handleLike} style={styles.likeButton}>Like ({likes})</button> 
+        <button onClick={handleDelete} style={styles.deleteButton}>Delete</button> 
       </div>
     </div>
   );
