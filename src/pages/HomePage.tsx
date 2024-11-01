@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { MensagemResponse } from "../components/Interfaces";
 import { toastError, toastInfo, toastWarning } from "../services/CustomToast";
 import { useAuth } from "../services/AuthProvider";
+import { Dropdown} from 'primereact/dropdown';
 
 
 function HomePage() {
@@ -30,7 +31,7 @@ function HomePage() {
         }).finally(() => {
             setLoading(false);
         })
-    };
+    }; 
 
     // Hook useEffect para carregar os tweets quando o componente montar
     useEffect(() => {
@@ -71,6 +72,14 @@ function HomePage() {
         <>
             {user.role === 'ADMIN' && (<Button label="Denuncias" icon="pi pi-twitter" onClick={() => navigate('/bloqueados')} />)}
             <PostTweet onNewTweet={fetchTweets} />
+            {/* Filtro de Usuarios */}
+            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="Usuario" className="w-full md:w-14rem"/>
+            {/* Filtro de Email */}
+            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="Email" className="w-full md:w-14rem"/>
+            {/* Filtro de Data Inicial */}
+            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="Data Inicial" className="w-full md:w-14rem"/>
+            {/* Filtro de Data Final */}
+            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="DataFinal" className="w-full md:w-14rem"/>
             <div className="tweet-list">
                 <TweetList
                     tweets={tweets}
