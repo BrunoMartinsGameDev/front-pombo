@@ -6,7 +6,6 @@ import { Auth, Mensagems } from "../services/Api";
 import { useEffect, useState } from "react";
 import { MensagemResponse } from "../components/Interfaces";
 import { toastError, toastInfo, toastWarning } from "../services/CustomToast";
-import { InputText } from "primereact/inputtext";
 import { useAuth } from "../services/AuthProvider";
 
 
@@ -18,10 +17,10 @@ function HomePage() {
     const [error, setError] = useState<string | null>(null); // Estado para armazenar erros
 
     // Função para buscar tweets da API
-    const fetchTweets = async (search?: string) => {
+    const fetchTweets = async () => {
         setLoading(true);
         //Nao ta atualizando quando posta msg e esta trazendo todos os tweets, nao sei pq
-        await Mensagems.filter({ usuarioId: search, conteudo: search, page: null, size: null }).then((response) => {
+        await Mensagems.list({page: null, size: null }).then((response) => {
             console.log(response.data.content);
             setTweets(response.data.content);
             setError(null);
@@ -71,12 +70,8 @@ function HomePage() {
     return (
         <>
             {user.role === 'ADMIN' && (<Button label="Denuncias" icon="pi pi-twitter" onClick={() => navigate('/bloqueados')} />)}
-            <PostTweet onNewTweet={() => {fetchTweets}} />
+            <PostTweet onNewTweet={fetchTweets} />
             <div className="tweet-list">
-                <div style={{ width: '50%', marginBottom: '1rem' }} className="p-inputgroup flex-1">
-                    <InputText placeholder="Keyword" onChange={(e) => fetchTweets(e.target.value)} />
-                    <Button icon="pi pi-search" className="p-button-primary" />
-                </div>
                 <TweetList
                     tweets={tweets}
                     loading={loading}
