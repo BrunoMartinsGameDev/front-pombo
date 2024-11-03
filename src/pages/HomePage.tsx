@@ -7,21 +7,29 @@ import { useEffect, useState } from "react";
 import { MensagemResponse } from "../components/Interfaces";
 import { toastError, toastInfo, toastWarning } from "../services/CustomToast";
 import { useAuth } from "../services/AuthProvider";
-import { Dropdown} from 'primereact/dropdown';
+import { Calendar } from 'primereact/calendar';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { InputText } from 'primereact/inputtext';
+import { dataFormat } from "../utils/dataFormat";
 
 
 function HomePage() {
-    const {user} = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [tweets, setTweets] = useState<MensagemResponse[]>([]);
     const [loading, setLoading] = useState(true); // Estado para indicar se os dados estão sendo carregados
     const [error, setError] = useState<string | null>(null); // Estado para armazenar erros
 
+    const [dataInicial, setDatainicial] = useState<Date | null | undefined>(null);
+    const [dataFinal, setDataFinal] = useState<Date | null | undefined>(null);
+    const [search, setSearch] = useState('');
+
     // Função para buscar tweets da API
     const fetchTweets = async () => {
         setLoading(true);
         //Nao ta atualizando quando posta msg e esta trazendo todos os tweets, nao sei pq
-        await Mensagems.list({page: null, size: null }).then((response) => {
+        await Mensagems.filter({ search: search, dataInicial: dataFormat(dataInicial), dataFinal: dataFormat(dataFinal), page: null, size: null }).then((response) => {
             console.log(response.data.content);
             setTweets(response.data.content);
             setError(null);
@@ -31,12 +39,15 @@ function HomePage() {
         }).finally(() => {
             setLoading(false);
         })
-    }; 
+    };
 
     // Hook useEffect para carregar os tweets quando o componente montar
     useEffect(() => {
         fetchTweets();
     }, []);
+    useEffect(() => {
+        fetchTweets();
+    }, [dataInicial, dataFinal, search]);
     // Função para deletar um tweet
     const handleDeleteTweet = (id: any) => {
         const userId = Auth.user().id
@@ -49,7 +60,7 @@ function HomePage() {
                 if (error.status === 401) {
                     toastWarning('Você não pode deletar esse tweet, pois não foi criado por você')
                 }
-                else{toastError('Erro ao deletar')}
+                else { toastError('Erro ao deletar') }
             })
     };
 
@@ -72,14 +83,14 @@ function HomePage() {
         <>
             {user.role === 'ADMIN' && (<Button label="Denuncias" icon="pi pi-twitter" onClick={() => navigate('/bloqueados')} />)}
             <PostTweet onNewTweet={fetchTweets} />
-            {/* Filtro de Usuarios */}
-            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="Usuario" className="w-full md:w-14rem"/>
-            {/* Filtro de Email */}
-            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="Email" className="w-full md:w-14rem"/>
-            {/* Filtro de Data Inicial */}
-            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="Data Inicial" className="w-full md:w-14rem"/>
-            {/* Filtro de Data Final */}
-            <Dropdown filter showClear value={''} onChange={(e) => console.log(e.value)} options={['aaaa']} placeholder="DataFinal" className="w-full md:w-14rem"/>
+            <IconField style={{ maxWidth: '200px', margin: '0 auto', marginBottom: '10px' }} iconPosition="left">
+                <InputIcon className="pi pi-search"> </InputIcon>
+                <InputText placeholder="Nome ou Email" value={search} onChange={(e) => setSearch(e.target.value)} />
+            </IconField>
+            {/* Data Inicial */}
+            <Calendar style={{ marginRight: '10px' }} placeholder="Data Inicial" value={dataInicial} onChange={(e) => { setDatainicial(e.value) }} dateFormat="dd/mm/yy" />
+            {/* Data Final */}
+            <Calendar placeholder="Data Final" value={dataFinal} onChange={(e) => setDataFinal(e.value)} dateFormat="dd/mm/yy" />
             <div className="tweet-list">
                 <TweetList
                     tweets={tweets}

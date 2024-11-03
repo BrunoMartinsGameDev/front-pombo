@@ -39,8 +39,9 @@ export interface DenunciaList{
     mensagemId: number | null
 }
 export interface MensagemFilter{
-    usuarioId: string | null | undefined
-    conteudo: string | null | undefined
+    search: string | null | undefined
+    dataInicial: string | null | undefined
+    dataFinal: string | null | undefined
     page: number | null
     size: number | null
 }
