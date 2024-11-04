@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import PostTweet from "../components/PostTweet";
 import TweetList from "../components/TweetList";
 import { useNavigate } from "react-router-dom";
-import { Auth, Mensagems } from "../services/Api";
+import { Auth, Denuncias, Mensagems } from "../services/Api";
 import { useEffect, useState } from "react";
 import { MensagemResponse } from "../components/Interfaces";
 import { toastError, toastInfo, toastWarning } from "../services/CustomToast";
@@ -79,6 +79,17 @@ function HomePage() {
                 return { Message: 'Erro ao curtir' }
             })
     };
+
+    const handleDenuncia = async (id: any, denunciaText: string) => {
+        await Denuncias.postar({ descricao: denunciaText, mensagem_id: id })
+        .then(() => {
+            toastInfo('Denuncia enviada')
+        })
+        .catch((error) => {
+            console.log(error);
+            toastError('Erro ao enviar denuncia')
+        })
+    };
     return (
         <>
             {user.role === 'ADMIN' && (<Button label="Denuncias" icon="pi pi-twitter" onClick={() => navigate('/bloqueados')} />)}
@@ -97,7 +108,8 @@ function HomePage() {
                     loading={loading}
                     error={error}
                     handleDeleteTweet={handleDeleteTweet}
-                    handleLikeTweet={handleLikeTweet} />
+                    handleLikeTweet={handleLikeTweet}
+                    handleDenuncia={handleDenuncia} />
             </div>
         </>
     );

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DenunciaList, LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "../components/Interfaces";
+import { DenunciaList, DenunciaRequest, LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "../components/Interfaces";
 
 const backUrl = import.meta.env.VITE_BACK_URL ? import.meta.env.VITE_BACK_URL : "http://localhost:8080/";
 //#region Axios Config
@@ -65,6 +65,6 @@ export const Denuncias = {
     bloquear: (id: string, data: {bloqueado: boolean}) => axiosInstance.put(`restrito/denuncia/${id}`, data),
     delete: (id: string) => axiosInstance.delete(`restrito/denuncia/${id}`),
     list: (params: DenunciaList) => axiosInstance.get("restrito/denuncia", { params: params }),
-    postar: (data: MensagemRequest) => axiosInstance.post("restrito/denuncia", data),
+    postar: (data: DenunciaRequest) => axiosInstance.post("restrito/denuncia", data),
 }
 //#endregion

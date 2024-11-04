@@ -8,9 +8,10 @@ interface TweetListProps {
   error: string | null;
   handleDeleteTweet: (id: string) => void;
   handleLikeTweet: (id: string) => Promise<any>;
+  handleDenuncia: (id: string, denunciaText: string) => void;
 }
 
-const TweetList = ({ tweets, loading, error, handleDeleteTweet, handleLikeTweet }: TweetListProps) => {
+const TweetList = ({ tweets, loading, error, handleDeleteTweet, handleLikeTweet, handleDenuncia }: TweetListProps) => {
   
   if (loading) return <p>Carregando...</p>;
   if (error) return <p>{error}</p>;
@@ -30,6 +31,7 @@ const TweetList = ({ tweets, loading, error, handleDeleteTweet, handleLikeTweet 
             usuariosQueCurtiram={tweet.usuariosQueDeramLike}
             onDelete={handleDeleteTweet}
             onLike={handleLikeTweet}
+            onDenuncia={handleDenuncia}
           />
         ))
       ) : (

@@ -60,3 +60,20 @@ export interface MensagemResponse{
     usuarioCriador: any
     usuariosQueDeramLike: any
 }
+
+export interface DenunciaResponse{
+    id: string
+    descricao: string
+    dataDenuncia: Date
+    usuario: {
+        nome: string | null | undefined
+        email: string
+    }
+    mensagemDenunciada: {
+        texto: string
+        usuarioCriador: {
+            nome: string | null | undefined
+            email: string
+        }
+    }
+}
