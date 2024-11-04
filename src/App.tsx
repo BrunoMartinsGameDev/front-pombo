@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage';
 import DenunciaPage from './pages/DenunciaPage';
 import ProtectedRoutes from './services/ProtectedRoute';
 import { AuthProvider } from './services/AuthProvider';
+import NotFound404Page from './pages/NotFound404Page';
 function App() {
 
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/bloqueados" element={<DenunciaPage />} />
             </Route>
+            <Route path="*" element={<NotFound404Page />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

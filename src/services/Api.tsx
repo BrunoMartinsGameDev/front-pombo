@@ -1,9 +1,10 @@
 import axios from "axios";
 import { DenunciaList, LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "../components/Interfaces";
 
+const backUrl = import.meta.env.VITE_BACK_URL ? import.meta.env.VITE_BACK_URL : "http://localhost:8080/";
 //#region Axios Config
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080/",
+    baseURL: backUrl,
     headers: {
         "Content-Type": "application/json",
     },
