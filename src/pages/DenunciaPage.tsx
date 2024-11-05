@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { toastError } from "../services/CustomToast"
 import { Denuncias } from "../services/Api"
 import { DenunciaResponse } from "../components/Interfaces"
-import { decrypt } from "../services/Crypto"
+import { Denuncia } from "../components/Denuncia"
 
 function DenunciaPage(){
     const navigate = useNavigate()
@@ -17,7 +17,6 @@ function DenunciaPage(){
     async function fecthDenuncia(){
         await Denuncias.list({page: null, size: null, usuarioId: null,mensagemId: null})
         .then((response) => {
-            console.log(response.data.content)
             setDenuncia(response.data.content)
         })
         .catch((error) => {
@@ -35,11 +34,7 @@ function DenunciaPage(){
         {denuncia.length > 0 ? (
             denuncia.map(denuncia => (
                 <div key={denuncia.id}>
-                    <p>{denuncia.descricao}</p>
-                    <p>{denuncia.usuario.email}</p>
-                    <p>{new Date(denuncia.dataDenuncia.toString()).toLocaleString()}</p>
-                    <p>{decrypt(denuncia.mensagemDenunciada.texto)}</p>
-                    <p>{denuncia.mensagemDenunciada.usuarioCriador.email}</p>
+                    <Denuncia {...denuncia}/>
                 </div>
             ))
         ) : (

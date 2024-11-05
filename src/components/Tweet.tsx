@@ -35,6 +35,8 @@ const Tweet = (props: TweetProps) => {
   };
 
   const handleDenuncia = () => {
+    setDenunciaText('');
+    setVisible(false);
     props.onDenuncia(tweetId, denunciaText); // Chamando a função onDenuncia passada como prop com o ID
   };
 

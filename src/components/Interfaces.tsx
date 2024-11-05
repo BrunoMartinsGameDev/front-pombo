@@ -75,5 +75,6 @@ export interface DenunciaResponse{
             nome: string | null | undefined
             email: string
         }
+        dataCriacao: Date
     }
 }

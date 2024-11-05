@@ -62,7 +62,7 @@ export const Mensagems = {
 //#region Denuncias Endpoints
 export const Denuncias = {
     get: (id: string) => axiosInstance.get(`restrito/denuncia/${id}`),
-    bloquear: (id: string, data: {bloqueado: boolean}) => axiosInstance.put(`restrito/denuncia/${id}`, data),
+    bloquear: (id: string, data: {bloqueada: boolean}) => axiosInstance.put(`restrito/denuncia/${id}`, data),
     delete: (id: string) => axiosInstance.delete(`restrito/denuncia/${id}`),
     list: (params: DenunciaList) => axiosInstance.get("restrito/denuncia", { params: params }),
     postar: (data: DenunciaRequest) => axiosInstance.post("restrito/denuncia", data),
