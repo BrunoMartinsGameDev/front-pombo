@@ -1,7 +1,7 @@
 import axios from "axios";
 import { DenunciaList, DenunciaRequest, LoginRequest, MensagemFilter, MensagemList, MensagemRequest, SignUpRequest, UsuarioFiltroParams } from "../components/Interfaces";
 
-const backUrl = import.meta.env.VITE_BACK_URL ? import.meta.env.VITE_BACK_URL : "http://localhost:8080/";
+const backUrl = import.meta.env.VITE_BACK_URL != "" ? import.meta.env.VITE_BACK_URL : "http://localhost:8080/";
 //#region Axios Config
 const axiosInstance = axios.create({
     baseURL: backUrl,
